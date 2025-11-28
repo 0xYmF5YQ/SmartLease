@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Users, CreditCard, Wrench, Settings, LogOut, Home, Building } from 'lucide-react';
+import { LayoutDashboard, Users, CreditCard, Wrench, Settings, LogOut, Building } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -12,12 +12,12 @@ const Sidebar = ({ userRole = 'landlord' }) => {
   const location = useLocation();
 
   const menuItems = [
-    { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
-    { name: 'Properties', icon: Building, path: '/properties' }, 
-    { name: 'Tenants', icon: Users, path: '/pages/tenants' },
-    { name: 'Payments', icon: CreditCard, path: '/payments' },
-    { name: 'Maintenance', icon: Wrench, path: '/maintenance' },
-    { name: 'Settings', icon: Settings, path: '/settings' },
+    { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' }, 
+    { name: 'Properties', icon: Building, path: '/dashboard/properties' },
+    { name: 'Tenants', icon: Users, path: '/dashboard/tenants' }, 
+    { name: 'Payments', icon: CreditCard, path: '/dashboard/payments' },
+    { name: 'Maintenance', icon: Wrench, path: '/dashboard/maintenance' },
+    { name: 'Settings', icon: Settings, path: '/dashboard/settings' },
   ];
 
   return (
@@ -33,20 +33,34 @@ const Sidebar = ({ userRole = 'landlord' }) => {
       </div>
       
       <nav className="flex-1 px-4 space-y-2 py-4">
-        {menuItems.map((item) => (
-          <Link
-            key={item.name}
-            to={item.path}
-            className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200 ${
-              location.pathname === item.path
-                ? 'bg-indigo-50 text-indigo-700 font-semibold'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-indigo-600'
-            }`}
-          >
-            <item.icon size={20} />
-            <span className="font-medium">{item.name}</span>
-          </Link>
-        ))}
+        {menuItems.map((item) => {
+          
+          let isActive;
+
+          // Check for exact match for the main Dashboard path to prevent other pages from being highlighted
+          if (item.path === '/dashboard') {
+            isActive = location.pathname === '/dashboard';
+          } else {
+            // Use startsWith for all other nested paths (e.g., /dashboard/tenants/details should highlight Tenants)
+            isActive = location.pathname.startsWith(item.path);
+          }
+
+
+          return (
+            <Link
+              key={item.name}
+              to={item.path}
+              className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200 ${
+                isActive
+                  ? 'bg-indigo-50 text-indigo-700 font-semibold'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-indigo-600'
+              }`}
+            >
+              <item.icon size={20} />
+              <span className="font-medium">{item.name}</span>
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="p-4 border-t border-gray-200">

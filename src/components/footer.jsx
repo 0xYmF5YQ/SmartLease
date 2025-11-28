@@ -15,17 +15,17 @@ const Footer = () => {
         <div>
           <h4 className="font-bold text-white text-lg mb-6">Quick Links</h4>
           <ul className="space-y-3">
-            <li><Link to="/features" className="hover:text-indigo-400 transition-colors">Features</Link></li>
-            <li><Link to="/pricing" className="hover:text-indigo-400 transition-colors">Pricing</Link></li>
-            <li><Link to="/about" className="hover:text-indigo-400 transition-colors">About Us</Link></li>
-            <li><Link to="/faq" className="hover:text-indigo-400 transition-colors">FAQ</Link></li>
+            <li><Link to="/content/features" className="hover:text-indigo-400 transition-colors">Features</Link></li>
+            <li><Link to="/content/pricing" className="hover:text-indigo-400 transition-colors">Pricing</Link></li>
+            <li><Link to="/content/about" className="hover:text-indigo-400 transition-colors">About Us</Link></li>
+            <li><Link to="/content/faq" className="hover:text-indigo-400 transition-colors">FAQ</Link></li>
           </ul>
         </div>
         <div>
           <h4 className="font-bold text-white text-lg mb-6">Legal</h4>
           <ul className="space-y-3">
-            <li><Link to="/privacy" className="hover:text-indigo-400 transition-colors">Privacy Policy</Link></li>
-            <li><Link to="/terms" className="hover:text-indigo-400 transition-colors">Terms of Service</Link></li>
+            <li><Link to="/content/privacy" className="hover:text-indigo-400 transition-colors">Privacy Policy</Link></li>
+            <li><Link to="/content/terms" className="hover:text-indigo-400 transition-colors">Terms of Service</Link></li>
           </ul>
         </div>
         <div>
@@ -50,7 +50,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <div className="text-center text-gray-500 mt-16 border-t border-gray-800 pt-8">
+      <div className="text-center text-indigo-400 mt-16 border-t border-gray-800 pt-8">
         &copy; {new Date().getFullYear()} SmartLease. All rights reserved.
       </div>
     </footer>

@@ -1,17 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Wrench, FileText, Trash2, PlusCircle, Edit } from "lucide-react";
-import { BarChart,Bar,XAxis,YAxis,Tooltip,ResponsiveContainer,Legend } from "recharts";
-import { Users, AlertCircle, Wallet, TrendingUp, Home, Calendar, Clock } from 'lucide-react';
-import Sidebar from '../components/sidebar'; 
+import { Wrench, FileText, Wallet, Users, AlertCircle, TrendingUp, Calendar, Clock } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { Outlet } from 'react-router-dom'; 
+import Sidebar from '../../components/sidebar'; 
+
+// --- Animation and Utility Components ---
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1, 
-    },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
@@ -24,7 +24,6 @@ const statCardVariants = {
   hidden: { opacity: 0, scale: 0.8 },
   visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 100, damping: 10 } },
 };
-
 
 const StatCard = ({ title, value, subtext, icon: Icon, color }) => (
   <motion.div
@@ -46,10 +45,26 @@ const StatCard = ({ title, value, subtext, icon: Icon, color }) => (
   </motion.div>
 );
 
-const Dashboard = () => {
-  
+// --- Sample Data for Recharts ---
+const monthlyRentData = [
+  { month: 'Jan', collected: 800000, expected: 1050000 },
+  { month: 'Feb', collected: 320000, expected: 350000 },
+  { month: 'Mar', collected: 950000, expected: 950000 },
+  { month: 'Apr', collected: 345000, expected: 350000 },
+  { month: 'May', collected: 3030000, expected: 3050000 },
+  { month: 'Jun', collected: 550000, expected: 2050000 },
+  { month: 'Jul', collected: 5000000, expected: 5000000 },
+  { month: 'Aug', collected: 950000, expected: 1050000 },
+  { month: 'Sep', collected: 350000, expected: 3050000 },
+  { month: 'Oct', collected: 1250000, expected: 3500000 },
+  { month: 'Nov', collected: 850000, expected: 1050000 },
+];
+
+
+
+const DashboardHome = () => {
   const user = {
-    name: "Aisha",
+    name: "0xYmFYQ==",
     role: "landlord", 
     propertiesManaged: 3,
     tenantsCount: 24,
@@ -91,12 +106,9 @@ const Dashboard = () => {
     return { bg: 'bg-indigo-500', text: 'text-indigo-600' };
   };
 
-
   return (
-    <div className="flex">
-      <Sidebar userRole={user.role} /> {/* Pass userRole to Sidebar */}
-      <motion.div
-        className="flex-1 p-8 ml-64 bg-gray-50 min-h-screen" // Adjusted margin for sidebar
+    <motion.div
+        className="p-8 bg-gray-50 min-h-screen" 
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -116,7 +128,7 @@ const Dashboard = () => {
         {/* Stats Grid */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
-          variants={containerVariants} // Use container for staggering
+          variants={containerVariants} 
         >
           <StatCard
             title="Total Revenue"
@@ -215,7 +227,7 @@ const Dashboard = () => {
           </motion.div>
         </div>
         
-        {/* Placeholder for Charts (e.g., Monthly Rent Collection, Vacancy Trends) */}
+        {/* Monthly Rent Collection Trend Chart */}
         <motion.div
           className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6"
           variants={itemVariants}
@@ -223,16 +235,48 @@ const Dashboard = () => {
           animate={{ opacity: 1, y: 0, transition: { delay: 0.8 } }}
         >
           <h3 className="font-bold text-lg text-gray-800 mb-4">Monthly Rent Collection Trend</h3>
-          <div className="h-64 flex items-center justify-center text-gray-400">
-            {/* Chart.js or Recharts component will go here */}
-            <BarChart size={48} />
-            <span className="ml-4 text-xl">Chart Placeholder</span>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={monthlyRentData}
+                margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+              >
+                <XAxis dataKey="month" stroke="#6b7280" />
+                <YAxis stroke="#6b7280" unit=" KES" tickFormatter={(value) => (value / 1000).toFixed(0) + 'K'} />
+                <Tooltip 
+                    cursor={{ fill: 'rgba(99, 102, 241, 0.1)' }} 
+                    formatter={(value, name) => [value.toLocaleString('en-US') + ' KES', name === 'collected' ? 'Collected' : 'Expected']}
+                    labelFormatter={(label) => `Month: ${label}`}
+                />
+                <Legend iconType="circle" wrapperStyle={{ paddingTop: '10px' }}/>
+                <Bar dataKey="expected" fill="#90a7f3ff" name="Expected Rent" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="collected" fill="#150aedff" name="Rent Collected" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </motion.div>
-
-      </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
+
+const Dashboard = () => {
+    const user = { name: "0xYmFYQ==", role: "landlord" }; 
+    
+    return (
+        <div className="flex min-h-screen bg-gray-50">
+            
+            <Sidebar userRole={user.role} /> 
+            
+            
+            <main className="flex-1 ml-64">
+                
+                <Outlet />
+            </main>
+        </div>
+    );
+};
+
+
 export default Dashboard;
+export { DashboardHome };
